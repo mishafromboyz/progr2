@@ -19,7 +19,6 @@ int main()
     
     if (size>capacity)
     {
-	
 		printf("size must be less than capacity, expecting errors\n");
     }
     
@@ -56,16 +55,16 @@ int main()
     else
     {
 		size_t newcap=intvector_getcapacity(v);
-		printf("using getcap function\ncapacity after pushback=%zu\n", newcap);
+		printf("\tusing getcap function\n\tcapacity after pushback=%zu\n", newcap);
     }
     
-    printf("\nrunning popback function\n");
+    printf("\n\nrunning popback function\n");
     intvector_popback(v);
     size_t newcap = intvector_getcapacity(v);
     size_t newsize = intvector_getsize(v);
-    printf("using getsize function\nsize after popback=%zu", newsize);
+    printf("\tusing getsize function\n\tsize after popback=%zu", newsize);
     
-    printf("\nrunning shrinktofit function\n");
+    printf("\n\nrunning shrinktofit function\n");
     check=intvector_shrinktofit(v);
     if (check==-1)
     {
@@ -75,7 +74,7 @@ int main()
     {
 	newsize=intvector_getsize(v);
 	newcap=intvector_getcapacity(v);
-	printf("after shrinktofit size=%zu, cap=%zu", newsize, newcap);
+	printf("\nafter shrinktofit size=%zu, cap=%zu", newsize, newcap);
     }
     
     printf("\nrunning resize function\nenter new size");
@@ -88,10 +87,10 @@ int main()
     else
     {
 	newsize=intvector_getsize(v);
-	printf("after resize size=%zu", newsize);
+	printf("\tafter resize size=%zu", newsize);
     }
     
-    printf("\nrunning reserve function\nenter new cap\n");
+    printf("\n\nrunning reserve function\nenter new cap\n");
     scanf("%zu", &newcap);
     check=intvector_reserve(v, newcap);
     if (check==-1)

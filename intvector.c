@@ -6,13 +6,19 @@
 intvector *intvector_new(size_t init_capacity)
 {
     intvector *v=malloc(sizeof(v));
-    
-    if (v!=NULL && init_capacity>0)
     {
-		v->val=malloc(sizeof(v)*init_capacity);
-		v->size=0;
-		v->capacity=init_capacity;
-		return v;
+    if (v!=NULL && init_capacity>0)
+		{
+			v->val=malloc(sizeof(v)*init_capacity);
+			v->size=0;
+			v->capacity=init_capacity;
+			printf("successully allocated memory\n");
+		}	
+		else
+		{
+			printf("couldnt allocate memory for intvector\n");
+			return NULL;
+		}
 	}
 	if (v->val == NULL)
 	{
@@ -22,16 +28,16 @@ intvector *intvector_new(size_t init_capacity)
     }
     else
     {
-		printf("error\n");
-		return NULL;
-    }
+		printf("success\n");
+		return v;
+	}
 }
 
 intvector *intvector_copy(const intvector *v)
 {
     intvector *new=intvector_new(v->capacity);
     new->size=v->size;
-    if (new==NULL || new->size<=0 || new->capacity<=0)
+    if (new==NULL || new->size<0 || new->capacity<0)
     {
 		printf("error\n");
 		return NULL;
@@ -40,6 +46,7 @@ intvector *intvector_copy(const intvector *v)
 	{
 	    new->val[i]=v->val[i];
 	}
+	printf("success\n");
 	return new;
 }
 
@@ -50,32 +57,39 @@ void intvector_free(intvector *v)
 
 int intvector_getitem(const intvector *v, size_t index)
 {
-    if (index>v->size || v->val==NULL)
+    if (index>v->size || v->val==NULL || index<0)
     {
         printf("error\n");
 		return 0;
     }
     int num=v->val[index];
+    printf("success\n");
     return num;
 }
     
 void intvector_setitem(intvector *v, size_t index, int item)
 {
-    if (index>v->capacity)
+	if (v->val==NULL)
+    {
+		printf("array error\n");
+	}
+	
+    else if (index>v->capacity)
     {
 		printf("out of capacity error\n");
     }
-    if (index>v->size)
+    
+    else if (index>v->size)
     {
 		v->size=index;
+		v->val[index]=item;
+		printf("success\n");
 	}
-    if (v->val==NULL)
-    {
-		printf("value error\n");
-	}
+    
     else
     {
 		v->val[index]=item;
+		printf("success\n");
 	}
 }
 
@@ -105,13 +119,9 @@ int intvector_pushback(intvector *v, int item)
 		v->capacity *= 2;
 		v->val=realloc(v->val, v->capacity*sizeof(int));
 	}
-	if (v->val==NULL)
-	{
-	    printf("error\n");
-	    return -1;
-	}
 	v->size++;
 	v->val[v->size-1]=item;
+	printf("success\n");
 	return 0;
 }
 
@@ -132,6 +142,8 @@ int intvector_shrinktofit(intvector *v)
     }
     
     v->capacity=v->size;
+    v->val=realloc(v->val, v->capacity*sizeof(int));
+    printf("success\n");
     return 0;
 }
 
@@ -144,31 +156,35 @@ int intvector_resize(intvector *v, size_t new_size)
     
     if (new_size >= v->size)
     {
-	v->size=new_size;
-	for (int i=v->size; i<new_size; i++)
+		int i=v->size-1;
+		v->size=new_size;
+	for (; i<new_size-1; i++)
 	{
 	    v->val[i]=0;
 	}
     }
-	if (new_size<v->size)
+	else if (new_size<v->size)
 	{
 	    intvector_shrinktofit(v);
 	}
+	printf("success\n");
 	return 0;
 }
 
 int intvector_reserve(intvector *v, size_t new_cap)
 {
-    
-    if(new_cap>v->capacity)
-    {
-		v->capacity=new_cap;
-		v->val=realloc(v->val, new_cap*(sizeof(int)));
 	if (v->val==NULL)
 	{
 	    printf("memory error\n");
 	    return -1;
 	}
+    
+    if(new_cap>v->capacity || new_cap!=0)
+    {
+		v->capacity=new_cap;
+		v->val=realloc(v->val, new_cap*(sizeof(int)));
+	
+	printf("success\n");
 	return 0;
     }
     return -1;
